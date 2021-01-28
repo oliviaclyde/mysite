@@ -1,0 +1,11 @@
+# ENV
+env
+
+#Settings
+settings.py
+
+#DB
+db.sqlite3
+
+#py_cache
+__pycache__
