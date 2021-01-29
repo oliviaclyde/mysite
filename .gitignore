@@ -9,3 +9,6 @@ db.sqlite3
 
 #py_cache
 __pycache__
+
+#db migrations - for purposes of this exercise not going to commit these to version control
+migrations/
