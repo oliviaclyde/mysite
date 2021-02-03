@@ -1,9 +1,11 @@
 import unittest
 from django.test import TestCase
-from django.http import HttpRequest
+from django.http import HttpRequest, HttpResponse
 from django.template.loader import render_to_string
-from . views import index
+from . views import index, detail
 from . models import Question, Choice
+from django.urls import reverse
+
 
 # Create your tests here.
 class HomePageTest(TestCase):
@@ -31,3 +33,27 @@ class HomePageTest(TestCase):
         second_saved_question = saved_items[1]
         self.assertEqual(first_saved_question.question_text, 'What is your favorite color?')
         self.assertEqual(second_saved_question.question_text, 'What is the best day of the week?')
+
+
+def create_question(question_text):
+        return Question.objects.create(question_text=question_text)
+
+class ViewsTest(TestCase):
+    # def get_request(self):
+    #     request = HttpRequest()
+    #     first_question = Question()
+    #     question_id = first_question.question_text("Is this your question?")
+    #     # question_id = 1
+    #     return request
+    
+    def test_detail(self):    
+        first_question = create_question(question_text="Is this your question?")
+        url = reverse('polls:detail', args=(first_question.id,))
+        response = self.client.get(url)
+        self.assertContains(response, first_question.question_text)
+        
+    def test_results(self):
+        pass
+
+    def vote(self):
+        pass
