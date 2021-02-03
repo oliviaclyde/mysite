@@ -1,5 +1,5 @@
 import unittest
-from django.test import TestCase
+from django.test import TestCase, Client, RequestFactory
 from django.http import HttpRequest, HttpResponse
 from django.template.loader import render_to_string
 from . views import index, detail
@@ -9,13 +9,20 @@ from django.urls import reverse
 
 # Create your tests here.
 class HomePageTest(TestCase):
-    def test_home_page_returns_correct_html(self):
-        request = HttpRequest()
-        response = index(request)
-        html = response.content.decode('utf8')
-        self.assertEqual(response.status_code, 200)
-        self.assertIn('Hello, world. You\'re at the polls index.', html)
+    def setUp(self):
+        self.factory = RequestFactory()
+        self.client = Client()
 
+    def test_home_page_returns_correct_html(self):
+        request = self.factory.get('/polls/index')
+        response = index(request)
+        self.assertEqual(response.status_code, 200)
+        # response = self.client.get('/')
+        # self.assertTemplateUsed(response, 'index.html')
+
+    # def test_no_entries(self):
+    #     response = self.client.get('/')
+    #     self.assertContains(response, 'No blog entires yet.')
 
     def test_saving_and_retrieving_items(self):
         first_question = Question()
